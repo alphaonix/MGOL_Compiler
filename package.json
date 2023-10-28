@@ -1,0 +1,16 @@
+{
+  "name": "mgc",
+  "version": "1.0.0",
+  "description": "MGOL Language Compiler",
+  "main": "index.js",
+  "repository": "git@github.com:mickaelmendes50/MGOL_Compiler.git",
+  "author": "Mickael Mesquita",
+  "license": "MIT",
+  "dependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.ts"
+  }
+}
