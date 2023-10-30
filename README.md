@@ -33,6 +33,7 @@ The MGOL Language Compiler (MLC) is a front-end compiler project that analyzes M
    ```
 3. Install project dependencies:
    ```
+   $ npm install
    $ yarn
    ```
 4. Execute project:
