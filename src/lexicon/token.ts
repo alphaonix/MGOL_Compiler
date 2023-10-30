@@ -1,0 +1,9 @@
+import {z} from "zod";
+
+export const Token = z.object({
+    class: z.string(),
+    lex: z.string(),
+    type: z.string(),
+})
+
+export type Token = z.infer<typeof Token>
