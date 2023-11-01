@@ -1,33 +1,15 @@
 import {Token} from "../lexicon/token";
 
 export class DFA {
-    public alphabet: Set<string>;
-    public states: number[];
     public initialState: number;
-    public acceptingStates: Set<string>;
     public currentState: number;
     public lex: string;
 
     constructor(
     ) {
-        const digits = Array.from(Array(10)).map((e, i) => i + 48).map((x) => String.fromCharCode(x));
-        const upper = Array.from(Array(26)).map((e, i) => i + 65).map((x) => String.fromCharCode(x));
-        const lower = Array.from(Array(26)).map((e, i) => i + 97).map((x) => String.fromCharCode(x));
-        const specialCharacters = [',', ';', ':', '.', '!', '?', '\\', '*', '+', '-', '/', '(', ')', '{', '}', '[', ']', '<', '>', '=', '\'', '\"', '_'];
-        this.alphabet = new Set(digits.concat(upper, lower, specialCharacters));
-        this.states = Array.from(Array(25));
         this.initialState = 0;
         this.currentState = 0;
         this.lex = '';
-        this.acceptingStates = new Set(["1", "2", "4", "7", "9", "10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"]);
-    }
-
-    public isValidChar(charCode: number): boolean {
-        const charSymbol = String.fromCharCode(charCode);
-        if (charCode === 32 || charCode === 13 || charCode === 10) {
-            return true;
-        }
-        return this.alphabet.has(charSymbol);
     }
 
     public recognize(char: string): Token | undefined {
