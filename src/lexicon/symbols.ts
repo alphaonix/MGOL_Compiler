@@ -36,3 +36,7 @@ export function isKeyword(word: string): boolean {
     }
     return false;
 }
+
+export function printSymbolsTable() {
+    console.log(symbolsTable)
+}
