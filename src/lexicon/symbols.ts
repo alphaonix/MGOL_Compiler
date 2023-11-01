@@ -29,3 +29,10 @@ export function loadKeywordSymbols() {
         symbolsTable.push(token);
     })
 }
+
+export function isKeyword(word: string): boolean {
+    for (const keyword of keywords) {
+        if (word === keyword) return true;
+    }
+    return false;
+}
