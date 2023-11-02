@@ -15,10 +15,10 @@ export class DFA {
             switch (this.state) {
                 case 0:
                     if (input[i] === ' ' || input[i] === '\t' || input[i] === '\n') {
-                        this.state = 0
+                        this.state = 0;
                     } else if (input[i] >= '0' && input[i] <= '9')  {
-                        this.state = 1
-                        this.lex = input[i]
+                        this.state = 1;
+                        this.lex = input[i];
                     } else if ((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
                         this.lex = input[i]
                         this.state = 22
@@ -26,20 +26,18 @@ export class DFA {
                     {
                         this.state = 25
                         this.lex = input[i]
-                    } else if (input[i] === '<') // feito
-                    {
-                        this.state = 9
-                        this.lex = input[i]
+                    } else if (input[i] === '<') {
+                        this.state = 9;
+                        this.lex = input[i];
                     } else if (input[i] === '=') {
-                        this.state = 13
-                        this.lex = input[i]
+                        this.state = 13;
+                        this.lex = input[i];
                     } else if (input[i] === '>') {
-                        this.state = 14
-                        this.lex = input[i]
-                    } else if (input[i] === '+' || input[i] === '-' || input[i] === '*' || input[i] === '/') //feito
-                    {
-                        this.lex = input[i]
-                        this.state = 15
+                        this.state = 14;
+                        this.lex = input[i];
+                    } else if (input[i] === '+' || input[i] === '-' || input[i] === '*' || input[i] === '/') {
+                        this.lex = input[i];
+                        this.state = 15;
                     } else if (input[i] === ';') //feito
                     {
                         this.state = 18
@@ -191,6 +189,71 @@ export class DFA {
                         this.lex = '';
                         i--;
                     }
+                    break;
+
+                case 9:
+                    if (input[i] === '>') {
+                        this.state = 10;
+                        this.lex += input[i];
+                    } else if (input[i] === '=') {
+                        this.state = 12;
+                        this.lex += input[i];
+                    } else if (input[i] === '-') {
+                        this.state = 11;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
+
+                case 10:
+                    yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 11:
+                    yield {class: "Atribuição", lex: this.lex, type: "RCB"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 12:
+                    yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 13:
+                    yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 14:
+                    if (input[i] === '=') {
+                        this.state = 13;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
+
+                case 15:
+                    yield {class: "OPM", lex: this.lex, type: this.lex}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
                     break;
             }
         }
