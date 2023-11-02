@@ -270,7 +270,7 @@ export class DFA {
                         this.state = 21;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        yield {class: "Constante literal", lex: this.lex, type: "Não fechou " + this.lex}
+                        yield {class: 'LIT', lex: this.lex, type: "Não fechou"}
                         this.state = 0;
                         this.lex = '';
                         i--;
@@ -281,7 +281,7 @@ export class DFA {
                     break;
 
                 case 21:
-                    yield {class: "Constante literal", lex: this.lex, type: "Constante literal"}
+                    yield {class: 'LIT', lex: this.lex, type: 'literal'}
                     this.state = 0;
                     this.lex = '';
                     i--;

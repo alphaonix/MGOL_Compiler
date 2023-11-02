@@ -11,4 +11,4 @@ while (!word.done) {
     //console.log(token);
     word = x.next();
 }
-printSymbolsTable()
+printSymbolsTable();
