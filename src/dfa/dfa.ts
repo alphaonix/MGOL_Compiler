@@ -14,7 +14,7 @@ export class DFA {
         for (let i = 0; i < input.length; i++) {
             switch (this.state) {
                 case 0:
-                    if (input[i] === ' ' || input[i] === '\t' || input[i] === '\n') {
+                    if (input[i] === ' ' || input[i] === '\t' || input[i] === '\n' || input[i] === '\r') {
                         this.state = 0;
                     } else if (input[i] >= '0' && input[i] <= '9')  {
                         this.state = 1;
@@ -287,7 +287,7 @@ export class DFA {
                     } else if (input[i+1] === undefined) {
                         yield {class: "Constante literal", lex: this.lex, type: "Não fechou " + this.lex}
                         this.state = 0;
-                        this.lex = "";
+                        this.lex = '';
                         i--;
                     } else {
                         this.state = 20;
@@ -298,8 +298,20 @@ export class DFA {
                 case 21:
                     yield {class: "Constante literal", lex: this.lex, type: "Constante literal"}
                     this.state = 0;
-                    this.lex = "";
+                    this.lex = '';
                     i--;
+                    break;
+
+                case 22:
+                    if ((input[i] >= 'A' && input[i] <= 'Z') || (input[i] >= 'a' && input[i] <= 'z') || (input[i] >= '0' && input[i] <= '9') || (input[i] === '_')) {
+                        this.state = 22;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: "id", lex: this.lex, type: "Identificador"}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
                     break;
             }
         }
