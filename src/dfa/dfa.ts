@@ -255,6 +255,52 @@ export class DFA {
                     this.lex = '';
                     i--;
                     break;
+
+                case 17:
+                    yield {class: "Virgula", lex: this.lex, type: this.lex}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 18:
+                    yield {class: "PT_V", lex: this.lex, type: this.lex}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 19:
+                    if (input[i] === '"') {
+                        this.state = 21;
+                        this.lex += input[i];
+                    } else {
+                        this.state = 20;
+                        this.lex += input[i];
+                    }
+                    break;
+
+                case 20:
+                    if (input[i] === '"') {
+                        this.state = 21;
+                        this.lex += input[i];
+                    } else if (input[i+1] === undefined) {
+                        yield {class: "Constante literal", lex: this.lex, type: "Não fechou " + this.lex}
+                        this.state = 0;
+                        this.lex = "";
+                        i--;
+                    } else {
+                        this.state = 20;
+                        this.lex += input[i];
+                    }
+                    break;
+
+                case 21:
+                    yield {class: "Constante literal", lex: this.lex, type: "Constante literal"}
+                    this.state = 0;
+                    this.lex = "";
+                    i--;
+                    break;
             }
         }
         yield {class: 'EOF', lex: '$', type: null}
