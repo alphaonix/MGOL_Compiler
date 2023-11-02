@@ -313,6 +313,20 @@ export class DFA {
                         i--;
                     }
                     break;
+
+                case 23:
+                    yield {class: "FC_P", lex: this.lex, type: "Fecha Parênteses"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
+
+                case 24:
+                    yield {class: "AB_P", lex: this.lex, type: "Abre Parênteses"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
             }
         }
         yield {class: 'EOF', lex: '$', type: null}
