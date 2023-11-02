@@ -327,6 +327,38 @@ export class DFA {
                     this.lex = '';
                     i--;
                     break;
+
+                case 25:
+                    if (input[i] === '}') {
+                        this.state = 27;
+                        this.lex += input[i];
+                    } else {
+                        this.state = 26;
+                        this.lex += input[i];
+                    }
+                    break;
+
+                case 26:
+                    if (input[i] === '}') {
+                        this.state = 27;
+                        this.lex += input[i];
+                    } else if (input[i+1] === undefined) {
+                        yield {class: "COMENTARIO", lex: this.lex, type: "Não fechou '}'"}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    } else {
+                        this.state = 26;
+                        this.lex += input[i];
+                    }
+                    break;
+
+                case 27:
+                    yield {class: "COMENTARIO", lex: this.lex, type: "comentario"}
+                    this.state = 0;
+                    this.lex = '';
+                    i--;
+                    break;
             }
         }
         yield {class: 'EOF', lex: '$', type: null}
