@@ -292,7 +292,7 @@ export class DFA {
                         this.state = 22;
                         this.lex += input[i];
                     } else {
-                        yield {class: "id", lex: this.lex, type: "Identificador"}
+                        yield {class: 'ID', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
                         i--;
