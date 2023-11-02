@@ -22,8 +22,7 @@ export class DFA {
                     } else if ((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
                         this.lex = input[i]
                         this.state = 22
-                    } else if (input[i] === '{') //feito
-                    {
+                    } else if (input[i] === '{') {
                         this.state = 25
                         this.lex = input[i]
                     } else if (input[i] === '<') {
@@ -38,35 +37,29 @@ export class DFA {
                     } else if (input[i] === '+' || input[i] === '-' || input[i] === '*' || input[i] === '/') {
                         this.lex = input[i];
                         this.state = 15;
-                    } else if (input[i] === ';') //feito
-                    {
-                        this.state = 18
-                        this.lex = input[i]
-                    } else if (input[i] === ',') //feito
-                    {
-                        this.state = 17
-                        this.lex = input[i]
-                    } else if (input[i] === '"') //feito
-                    {
-                        this.state = 19
-                        this.lex = input[i]
-                    } else if (input[i] === '(') //feito
-                    {
-                        this.state = 24
-                        this.lex = input[i]
-                    } else if (input[i] === ')') //feito
-                    {
-                        this.state = 23
-                        this.lex = input[i]
+                    } else if (input[i] === ';') {
+                        this.state = 18;
+                        this.lex = input[i];
+                    } else if (input[i] === ',') {
+                        this.state = 17;
+                        this.lex = input[i];
+                    } else if (input[i] === '"') {
+                        this.state = 19;
+                        this.lex = input[i];
+                    } else if (input[i] === '(') {
+                        this.state = 24;
+                        this.lex = input[i];
+                    } else if (input[i] === ')') {
+                        this.state = 23;
+                        this.lex = input[i];
                     } else if (input[i] === '$') {
-                        break
+                        break;
                     } else {
-                        this.lex = input[i]
+                        this.lex = input[i];
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         ////console.log('ERROR léxico - Caractere inválido na linguagem. Linha ${linha}, coluna ${coluna}.`)
-                        this.state = 0
-                        this.lex = ""
-                        //i--
+                        this.state = 0;
+                        this.lex = '';
                     }
                     break;
 
@@ -82,7 +75,7 @@ export class DFA {
                         this.state = 4;
                         this.lex += input[i];
                     } else {
-                        yield {class: "NUM", lex: this.lex, type: "inteiro"}
+                        yield {class: 'NUM', lex: this.lex, type: 'inteiro'}
                         this.state = 0;
                         this.lex = '';
                         i--;
@@ -109,11 +102,7 @@ export class DFA {
                         this.state = 4;
                         this.lex += input[i];
                     } else {
-                        if (float === 1) {
-                            yield {class: "NUM", lex: this.lex, type: "float"}
-                        } else {
-                            yield {class: "NUM", lex: this.lex, type: "inteiro"}
-                        }
+                        yield {class: 'NUM', lex: this.lex, type: (float === 1) ? 'real' : 'inteiro'}
                         float = 0;
                         this.state = 0;
                         this.lex = '';
@@ -150,11 +139,7 @@ export class DFA {
                         this.state = 6;
                         this.lex += input[i];
                     } else {
-                        if (float === 1) {
-                            yield {class: "NUM", lex: this.lex, type: "float"}
-                        } else {
-                            yield {class: "NUM", lex: this.lex, type: "inteiro"}
-                        }
+                        yield {class: 'NUM', lex: this.lex, type: (float === 1) ? 'real' : 'inteiro'}
                         this.state = 0;
                         this.lex = '';
                         float = 0;
@@ -171,7 +156,7 @@ export class DFA {
                         this.state = 8;
                         this.lex += input[i];
                     } else {
-                        yield {class: "NUM", lex: this.lex, type: "inteiro"}
+                        yield {class: 'NUM', lex: this.lex, type: "inteiro"}
                         this.state = 0;
                         this.lex = '';
                         i--;
