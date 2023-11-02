@@ -187,7 +187,7 @@ export class DFA {
                         this.state = 11;
                         this.lex += input[i];
                     } else {
-                        yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                        yield {class: 'OPR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
                         i--;
@@ -195,28 +195,28 @@ export class DFA {
                     break;
 
                 case 10:
-                    yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                    yield {class: 'OPR', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
                     break;
 
                 case 11:
-                    yield {class: "Atribuição", lex: this.lex, type: "RCB"}
+                    yield {class: 'RCB', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
                     break;
 
                 case 12:
-                    yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                    yield {class: 'OPR', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
                     break;
 
                 case 13:
-                    yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                    yield {class: 'OPR', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
@@ -227,7 +227,7 @@ export class DFA {
                         this.state = 13;
                         this.lex += input[i];
                     } else {
-                        yield {class: "Operador relacional", lex: this.lex, type: "OPR"}
+                        yield {class: 'OPR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
                         i--;
@@ -235,21 +235,21 @@ export class DFA {
                     break;
 
                 case 15:
-                    yield {class: "OPM", lex: this.lex, type: this.lex}
+                    yield {class: 'OPM', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
                     break;
 
                 case 17:
-                    yield {class: "Virgula", lex: this.lex, type: this.lex}
+                    yield {class: 'VIR', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
                     break;
 
                 case 18:
-                    yield {class: "PT_V", lex: this.lex, type: this.lex}
+                    yield {class: 'PT_V', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
@@ -300,14 +300,14 @@ export class DFA {
                     break;
 
                 case 23:
-                    yield {class: "FC_P", lex: this.lex, type: "Fecha Parênteses"}
+                    yield {class: 'FC_P', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
                     break;
 
                 case 24:
-                    yield {class: "AB_P", lex: this.lex, type: "Abre Parênteses"}
+                    yield {class: 'AB_P', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
@@ -328,7 +328,7 @@ export class DFA {
                         this.state = 27;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        yield {class: "COMENTARIO", lex: this.lex, type: "Não fechou '}'"}
+                        yield {class: 'COMENTARIO', lex: this.lex, type: "Não fechou '}'"}
                         this.state = 0;
                         this.lex = '';
                         i--;
@@ -339,7 +339,7 @@ export class DFA {
                     break;
 
                 case 27:
-                    yield {class: "COMENTARIO", lex: this.lex, type: "comentario"}
+                    yield {class: 'COMENTARIO', lex: this.lex, type: null}
                     this.state = 0;
                     this.lex = '';
                     i--;
