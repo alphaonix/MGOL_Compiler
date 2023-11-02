@@ -1,92 +1,199 @@
 import {Token} from "../lexicon/token";
 
 export class DFA {
-    public initialState: number;
-    public currentState: number;
+    public state: number;
     public lex: string;
 
-    constructor(
-    ) {
-        this.initialState = 0;
-        this.currentState = 0;
+    constructor() {
+        this.state = 0;
         this.lex = '';
     }
 
-    public recognize(char: string): Token | undefined  {
-        do {
-            switch (this.currentState) {
+    public *recognize(input: string): Generator<Token>  {
+        let float: number = 0
+        for (let i = 0; i < input.length; i++) {
+            switch (this.state) {
                 case 0:
-                    if (char === ' ' || char === '\t' || char === '\n') {
-                        this.currentState = 0
-                    } else if (char >= '0' && char <= '9') {
-                        this.currentState = 1
-                        this.lex = char
-                    } else if ((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) {
-                        this.currentState = 22
-                    } else if (char === '{') {
-                        this.currentState = 25
-                        this.lex = char
-                    } else if (char === '<') {
-                        this.currentState = 9
-                        this.lex = char
-                    } else if (char === '=') {
-                        this.currentState = 13
-                    } else if (char === '>') {
-                        this.currentState = 14
-                    } else if (char === '+' || char === '-' || char === '*' || char === '/') {
-                        this.lex = char
-                        this.currentState = 18
-                    } else if (char === ';') {
-                        this.currentState = 18
-                    } else if (char === ',') {
-                        this.currentState = 17
-                    } else if (char === '"') {
-                        this.currentState = 19
-                    } else if (char === '(') {
-                        this.currentState = 24
-                        this.lex = char
-                    } else if (char === ')') {
-                        this.currentState = 23
-                        this.lex = char
+                    if (input[i] === ' ' || input[i] === '\t' || input[i] === '\n') {
+                        this.state = 0
+                    } else if (input[i] >= '0' && input[i] <= '9')  {
+                        this.state = 1
+                        this.lex = input[i]
+                    } else if ((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
+                        this.lex = input[i]
+                        this.state = 22
+                    } else if (input[i] === '{') //feito
+                    {
+                        this.state = 25
+                        this.lex = input[i]
+                    } else if (input[i] === '<') // feito
+                    {
+                        this.state = 9
+                        this.lex = input[i]
+                    } else if (input[i] === '=') {
+                        this.state = 13
+                        this.lex = input[i]
+                    } else if (input[i] === '>') {
+                        this.state = 14
+                        this.lex = input[i]
+                    } else if (input[i] === '+' || input[i] === '-' || input[i] === '*' || input[i] === '/') //feito
+                    {
+                        this.lex = input[i]
+                        this.state = 15
+                    } else if (input[i] === ';') //feito
+                    {
+                        this.state = 18
+                        this.lex = input[i]
+                    } else if (input[i] === ',') //feito
+                    {
+                        this.state = 17
+                        this.lex = input[i]
+                    } else if (input[i] === '"') //feito
+                    {
+                        this.state = 19
+                        this.lex = input[i]
+                    } else if (input[i] === '(') //feito
+                    {
+                        this.state = 24
+                        this.lex = input[i]
+                    } else if (input[i] === ')') //feito
+                    {
+                        this.state = 23
+                        this.lex = input[i]
+                    } else if (input[i] === '$') {
+                        break
                     } else {
-                        this.lex = char
-                        const token: Token = {class: 'ERROR', lex: char, type: null}
-                        this.currentState = 0
-                        this.lex = ''
-                        return token;
+                        this.lex = input[i]
+                        yield {class: 'ERROR', lex: this.lex, type: null}
+                        ////console.log('ERROR léxico - Caractere inválido na linguagem. Linha ${linha}, coluna ${coluna}.`)
+                        this.state = 0
+                        this.lex = ""
+                        //i--
                     }
                     break;
 
-                case 18:
-                    if (char === '+') {
-                        const token: Token = {class: 'OPM', lex: this.lex, type: null};
-                        this.currentState = 0;
-                        this.lex = "";
-                        return token;
-                    } else if (char === '-') {
-                        const token: Token = {class: 'OPM', lex: this.lex, type: null};
-                        this.currentState = 0;
-                        this.lex = "";
-                        return token;
-                    } else if (char === '*') {
-                        const token: Token = {class: 'OPM', lex: this.lex, type: null};
-                        this.currentState = 0;
-                        this.lex = "";
-                        return token;
-                    } else if (char === '/') {
-                        const token: Token = {class: 'OPM', lex: this.lex, type: null};
-                        this.currentState = 0;
-                        this.lex = "";
-                        return token;
+                case 1:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 7;
+                        this.lex += input[i];
+                    } else if (input[i] === '.') {
+                        float = 1;
+                        this.state = 2;
+                        this.lex += input[i];
+                    } else if (input[i] === 'E' || input[i] === 'e') {
+                        this.state = 4;
+                        this.lex += input[i];
                     } else {
+                        yield {class: "NUM", lex: this.lex, type: "inteiro"}
+                        this.state = 0;
                         this.lex = '';
-                        this.currentState = 0;
+                        i--;
                     }
-                    break
-                default:
-                    this.currentState = 0;
+                    break;
+
+                case 2:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 3;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: 'ERROR', lex: this.lex, type: null}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
+
+                case 3:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 3;
+                        this.lex += input[i];
+                    } else if (input[i] === 'E' || input[i] === 'e') {
+                        this.state = 4;
+                        this.lex += input[i];
+                    } else {
+                        if (float === 1) {
+                            yield {class: "NUM", lex: this.lex, type: "float"}
+                        } else {
+                            yield {class: "NUM", lex: this.lex, type: "inteiro"}
+                        }
+                        float = 0;
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
+
+                case 4:
+                    if (input[i] === '+' || input[i] === '-') {
+                        this.state = 5;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: 'ERROR', lex: this.lex, type: null}
+                        this.state = 0;
+                        this.lex = '';
+                        i--
+                    }
+                    break;
+
+                case 5:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 6;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: 'ERROR', lex: this.lex, type: null}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
+
+                case 6:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 6;
+                        this.lex += input[i];
+                    } else {
+                        if (float === 1) {
+                            yield {class: "NUM", lex: this.lex, type: "float"}
+                        } else {
+                            yield {class: "NUM", lex: this.lex, type: "inteiro"}
+                        }
+                        this.state = 0;
+                        this.lex = '';
+                        float = 0;
+                        i--;
+                    }
+                    break;
+
+                case 7:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 7;
+                        this.lex += input[i];
+                    } else if (input[i] === '.') {
+                        float = 1;
+                        this.state = 8;
+                        this.lex += input[i];
+                    } else {
+                        yield {class: "NUM", lex: this.lex, type: "inteiro"}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
+
+                case 8:
+                    if (input[i] >= '0' && input[i] <= '9') {
+                        this.state = 6;
+                        this.lex += input[i];
+                    }
+                    else {
+                        yield {class: 'ERROR', lex: this.lex, type: null}
+                        this.state = 0;
+                        this.lex = '';
+                        i--;
+                    }
+                    break;
             }
-        } while (this.currentState !== 0)
-        return undefined
+        }
+        yield {class: 'EOF', lex: '$', type: null}
     }
 }
