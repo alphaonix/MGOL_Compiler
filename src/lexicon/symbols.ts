@@ -38,5 +38,9 @@ export function isKeyword(word: string): boolean {
 }
 
 export function printSymbolsTable() {
-    console.log(symbolsTable)
+    for (const token of symbolsTable) {
+        console.log('Classe: ' + token.class +
+                    ', Lexema: \'' + token.lex +
+                    '\', Tipo: ' + token.type);
+    }
 }

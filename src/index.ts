@@ -8,6 +8,7 @@ const x = lexicon();
 let word = x.next();
 while (!word.done) {
     const token: Token = word.value
-    console.log(token);
+    //console.log(token);
     word = x.next();
 }
+printSymbolsTable()
