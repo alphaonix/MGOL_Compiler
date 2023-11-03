@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import {DFA} from "../dfa/dfa";
 import {Token} from "./token";
-import {lexicon} from "./lexicon";
 
 export function* scanner(file: string): Generator<Token> {
     const algFile = fs.readFileSync(file);

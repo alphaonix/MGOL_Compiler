@@ -1,4 +1,5 @@
 import {Token} from "../lexicon/token";
+import {isKeyword} from "../lexicon/symbols";
 
 export class DFA {
     public line: number;
@@ -324,7 +325,11 @@ export class DFA {
                         this.state = 22;
                         this.lex += input[i];
                     } else {
-                        yield {class: 'ID', lex: this.lex, type: null}
+                        yield {
+                            class: isKeyword(this.lex) ? this.lex : 'ID',
+                            lex: this.lex,
+                            type: isKeyword(this.lex) ? this.lex : null
+                        }
                         this.state = 0;
                         this.lex = '';
                         i--;
