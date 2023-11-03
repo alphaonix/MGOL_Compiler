@@ -8,7 +8,10 @@ export function* lexicon(): Generator<Token> {
     const wordGenerator = scanner(SOURCE_FILE_PATH);
     let word = wordGenerator.next();
     while (!word.done) {
-        symbolsTable.push(word.value);
+        const token: Token = word.value;
+        if (token.class !== 'ERROR') {
+            symbolsTable.push(word.value);
+        }
         yield word.value;
         word = wordGenerator.next();
     }
