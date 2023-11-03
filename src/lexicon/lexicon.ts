@@ -9,7 +9,7 @@ export function* lexicon(): Generator<Token> {
     let word = wordGenerator.next();
     while (!word.done) {
         const token: Token = word.value;
-        if (token.class !== 'ERROR' && !isKeyword(token.lex) && !isPresent(token.lex)) {
+        if (token.class === 'ID' && !isKeyword(token.lex) && !isPresent(token.lex)) {
             symbolsTable.push(word.value);
         }
         yield word.value;
