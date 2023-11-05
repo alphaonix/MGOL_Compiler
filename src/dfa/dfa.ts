@@ -131,7 +131,13 @@ export class DFA {
                     if (input[i] === '+' || input[i] === '-') {
                         this.state = 5;
                         this.lex += input[i];
-                    } else {
+                    }
+                    else if (input[i] >= '0' && input[i] <= '9')
+                    {
+                        this.state = 6;
+                        this.lex += input[i];
+                    }
+                    else {
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
