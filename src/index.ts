@@ -2,13 +2,15 @@ import {loadKeywordSymbols, printSymbolsTable} from "./lexicon/symbols";
 import {lexicon} from "./lexicon/lexicon";
 import {Token} from "./lexicon/token";
 
-console.log('Service running');
 loadKeywordSymbols();
-const x = lexicon();
-let word = x.next();
-while (!word.done) {
-    const token: Token = word.value
+
+const lexiconGenerator = lexicon();
+let lexiconObject = lexiconGenerator.next();
+
+while (!lexiconObject.done) {
+    const token: Token = lexiconObject.value
     console.log(token);
-    word = x.next();
+    lexiconObject = lexiconGenerator.next();
 }
+
 printSymbolsTable();
