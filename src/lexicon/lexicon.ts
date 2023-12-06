@@ -4,6 +4,10 @@ import {isKeyword, isPresent, symbolsTable} from "./symbols";
 
 const SOURCE_FILE_PATH = 'input/fonte.alg';
 
+function isError(tokenClass: string): boolean {
+    return tokenClass === 'ERROR';
+}
+
 export function* lexicon(): Generator<Token> {
     const scannerGenerator = scanner(SOURCE_FILE_PATH);
     let scannerObject = scannerGenerator.next();
@@ -13,7 +17,11 @@ export function* lexicon(): Generator<Token> {
         if (token.class === 'ID' && !isKeyword(token.lex) && !isPresent(token.lex)) {
             symbolsTable.push(token);
         }
-        yield token;
+
+        if (!isError(token.class)) {
+            yield token;
+        }
+
         scannerObject = scannerGenerator.next();
     }
 }
