@@ -1,6 +1,6 @@
 import {scanner} from "./scanner";
 import {Token} from "./token";
-import {isKeyword, isPresent, symbolsTable} from "./symbols";
+import {getTokenFromTable, isKeyword, isPresent, symbolsTable} from "./symbols";
 
 const SOURCE_FILE_PATH = 'input/fonte.alg';
 
@@ -19,7 +19,11 @@ export function* lexicon(): Generator<Token> {
         }
 
         if (!isError(token.class)) {
-            yield token;
+            if (isPresent(token.lex)) {
+                yield getTokenFromTable(token.lex) as Token;
+            } else {
+                yield token;
+            }
         }
 
         scannerObject = scannerGenerator.next();
