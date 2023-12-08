@@ -1,4 +1,4 @@
-export const grammar = {
+export const grammar: Grammar = {
     '1': {'P\'':    ['P']},
     '2': {'P':      ['inicio', 'V', 'A']},
     '3': {'V':      ['varinicio', 'LV']},
@@ -38,4 +38,8 @@ export const grammar = {
     '37': {'CPR':   ['COND', 'CPR']},
     '38': {'CPR':   ['fimrepita']},
     '39': {'A':     ['fim']}
+}
+
+export interface Grammar {
+    [key: string]: { [key: string]: string[] };
 }
