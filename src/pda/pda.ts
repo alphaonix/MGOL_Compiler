@@ -34,11 +34,11 @@ export class PDA {
     }
 
     public parse(){
-        let token: Token;
+        let token: Token = this.getToken();
         this.stack.push('0');
 
-        while (!this.isDone) {
-            token = this.getToken();
+        do {
+            console.log(token)
             const state = this.getCurrentState();
             const hasAction = this.transitionTable[state][token.class];
 
@@ -47,7 +47,8 @@ export class PDA {
                 const routine = this.transitionTable[state][token.class].substring(1);
 
                 if (action === 's') {
-
+                    this.stack.push(routine);
+                    token = this.getToken();
                 } else if (action === 'r') {
 
                 } else if (action === 'a') {
@@ -56,6 +57,6 @@ export class PDA {
 
                 }
             }
-        }
+        } while (!this.isDone);
     }
 }
