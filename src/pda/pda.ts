@@ -29,13 +29,33 @@ export class PDA {
         return token;
     }
 
+    private getCurrentState() {
+        return this.stack[this.stack.length-1];
+    }
+
     public parse(){
-        this.stack.push('0');
         let token: Token;
+        this.stack.push('0');
 
         while (!this.isDone) {
             token = this.getToken();
-            console.log(token);
+            const state = this.getCurrentState();
+            const hasAction = this.transitionTable[state][token.class];
+
+            if (hasAction) {
+                const action = this.transitionTable[state][token.class][0];
+                const routine = this.transitionTable[state][token.class].substring(1);
+
+                if (action === 's') {
+
+                } else if (action === 'r') {
+
+                } else if (action === 'a') {
+
+                } else {
+
+                }
+            }
         }
     }
 }
