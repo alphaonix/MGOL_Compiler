@@ -1,11 +1,11 @@
-import {grammar} from "./grammar";
+import {Grammar, grammar} from "./grammar";
 import {Token} from "../lexicon/token";
 
 export class PDA {
     private readonly TRANSITION_TABLE_FILE_PATH = 'src/pda/states/ShiftReduce-Table.csv';
     private readonly csvConverter = require('convert-csv-to-json');
     private readonly transitionTable;
-    private readonly grammar;
+    private readonly grammar: Grammar;
 
     private stack: string[];
     private isDone: boolean | undefined;
@@ -38,19 +38,30 @@ export class PDA {
         this.stack.push('0');
 
         do {
-            console.log(token)
             const state = this.getCurrentState();
-            const hasAction = this.transitionTable[state][token.class];
+            const tokenClass = token.class.toLowerCase()
+            const hasAction = this.transitionTable[state][tokenClass];
 
             if (hasAction) {
-                const action = this.transitionTable[state][token.class][0];
-                const routine = this.transitionTable[state][token.class].substring(1);
+                const action = this.transitionTable[state][tokenClass][0];
+                const routine = this.transitionTable[state][tokenClass].substring(1);
 
                 if (action === 's') {
                     this.stack.push(routine);
                     token = this.getToken();
                 } else if (action === 'r') {
+                    const reduce = this.grammar[routine];
+                    const rule = Object.keys(reduce)[0];
+                    const ruleLength = reduce[rule].length;
 
+                    for (let i = 0; i < ruleLength; i++) {
+                        this.stack.pop();
+                    }
+
+                    const goTo = this.transitionTable[this.getCurrentState()][rule];
+                    this.stack.push(goTo)
+
+                    console.log(rule + ' -> ' + reduce[rule])
                 } else if (action === 'a') {
 
                 } else {
