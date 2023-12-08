@@ -8,7 +8,6 @@ export class PDA {
     private readonly grammar: Grammar;
 
     private stack: string[];
-    private isDone: boolean | undefined;
     private lexiconObject;
     private lexiconGenerator: Generator;
 
@@ -18,14 +17,12 @@ export class PDA {
 
         this.lexiconGenerator = lexiconGenerator;
         this.lexiconObject = lexiconGenerator.next();
-        this.isDone = this.lexiconObject.done;
         this.stack = [];
     }
 
     private getToken(): Token {
         const token: Token = this.lexiconObject.value
         this.lexiconObject = this.lexiconGenerator.next();
-        this.isDone = this.lexiconObject.done;
         return token;
     }
 
