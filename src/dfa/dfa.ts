@@ -71,7 +71,7 @@ export class DFA {
                         break;
                     } else {
                         this.lex = input[i];
-                        this.errorRoutine.invalidCharacter(Error.line, Error.column);
+                        this.errorRoutine.lexError(1, Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -307,7 +307,7 @@ export class DFA {
                         this.state = 21;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        this.errorRoutine.invalidLiteral(Error.line, Error.column);
+                        this.errorRoutine.lexError(2, Error.line, Error.column);
                         yield {class: 'LIT', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -375,7 +375,7 @@ export class DFA {
                         this.state = 27;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        this.errorRoutine.invalidComment(Error.line, Error.column);
+                        this.errorRoutine.lexError(3, Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
