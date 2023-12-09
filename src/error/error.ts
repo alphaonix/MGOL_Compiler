@@ -20,4 +20,12 @@ export class Error {
                 break;
         }
     }
+
+    public static syntaxError(code: number, line: number, column: number) {
+        switch (code) {
+            default:
+                console.log(`ERRO SINTÁTICO - Erro desconhecido na linha ${line}, coluna ${column}`);
+                break;
+        }
+    }
 }

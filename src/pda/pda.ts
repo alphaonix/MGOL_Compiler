@@ -1,5 +1,6 @@
 import {Grammar, grammar} from "./grammar";
 import {Token} from "../lexicon/token";
+import {Error} from "../error/error";
 
 export class PDA {
     private readonly TRANSITION_TABLE_FILE_PATH = 'src/pda/states/ShiftReduce-Table.csv';
@@ -63,7 +64,8 @@ export class PDA {
                     console.log('ACCEPT');
                     return;
                 } else {
-
+                    Error.syntaxError(routine, Error.line, Error.column)
+                    return;
                 }
             }
         } while (true);
