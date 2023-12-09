@@ -1,12 +1,14 @@
 import * as fs from "fs";
 import {DFA} from "../dfa/dfa";
 import {Token} from "./token";
+import {Error} from "../error/error";
 
 export function* scanner(file: string): Generator<Token> {
     const algFile = fs.readFileSync(file);
     const algStr = algFile.toString();
 
-    const dfa = new DFA();
+    const errorRoutine = new Error();
+    const dfa = new DFA(errorRoutine);
 
     const tokenGenerator = dfa.recognize(algStr.concat('$'));
     let tokenObject = tokenGenerator.next();

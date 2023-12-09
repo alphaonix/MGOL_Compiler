@@ -5,10 +5,12 @@ import {Error} from "../error/error";
 export class DFA {
     public state: number;
     public lex: string;
+    public errorRoutine: Error;
 
-    constructor() {
+    constructor(errorRoutine: Error) {
         Error.line = 0
         Error.column = 0;
+        this.errorRoutine = errorRoutine;
         this.state = 0;
         this.lex = '';
     }
@@ -69,7 +71,7 @@ export class DFA {
                         break;
                     } else {
                         this.lex = input[i];
-                        console.log(`ERRO LÉXICO - Caractere inválido na linguagem, linha ${Error.line}, coluna ${Error.column}`);
+                        this.errorRoutine.invalidCharacter(Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -305,7 +307,7 @@ export class DFA {
                         this.state = 21;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        console.log(`ERRO LÉXICO - O literal nunca termina, linha ${Error.line}, coluna ${Error.column}`);
+                        this.errorRoutine.invalidLiteral(Error.line, Error.column);
                         yield {class: 'LIT', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -373,7 +375,7 @@ export class DFA {
                         this.state = 27;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        console.log(`ERRO LÉXICO - O comentário nunca termina, linha ${Error.line}, coluna ${Error.column}`);
+                        this.errorRoutine.invalidComment(Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
