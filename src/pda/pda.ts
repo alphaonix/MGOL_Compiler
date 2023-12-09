@@ -64,7 +64,7 @@ export class PDA {
                     console.log('ACCEPT');
                     return;
                 } else {
-                    Error.syntaxError(routine, Error.line, Error.column)
+                    Error.syntaxError(token, routine, Error.line, (Error.column - token.lex.length))
                     return;
                 }
             }
