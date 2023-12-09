@@ -5,12 +5,10 @@ import {Error} from "../error/error";
 export class DFA {
     public state: number;
     public lex: string;
-    public errorRoutine: Error;
 
-    constructor(errorRoutine: Error) {
+    constructor() {
         Error.line = 0
         Error.column = 0;
-        this.errorRoutine = errorRoutine;
         this.state = 0;
         this.lex = '';
     }
@@ -71,7 +69,7 @@ export class DFA {
                         break;
                     } else {
                         this.lex = input[i];
-                        this.errorRoutine.lexError(1, Error.line, Error.column);
+                        Error.lexError(1, Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -307,7 +305,7 @@ export class DFA {
                         this.state = 21;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        this.errorRoutine.lexError(2, Error.line, Error.column);
+                        Error.lexError(2, Error.line, Error.column);
                         yield {class: 'LIT', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -375,7 +373,7 @@ export class DFA {
                         this.state = 27;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        this.errorRoutine.lexError(3, Error.line, Error.column);
+                        Error.lexError(3, Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';

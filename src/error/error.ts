@@ -4,7 +4,7 @@ export class Error {
 
     constructor() {}
 
-    public lexError(code: number, line: number, column: number) {
+    public static lexError(code: number, line: number, column: number) {
         switch (code) {
             case 1:
                 console.log(`ERRO LÉXICO - Caractere inválido na linguagem, linha ${line}, coluna ${column}`);
