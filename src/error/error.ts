@@ -28,6 +28,9 @@ export class Error {
             case '0':
                 console.log(`ERRO SINTÁTICO - Token inválido na linha ${line-1}, coluna ${column}.\n Esperado: inicio\n Obtido: ${token.lex}`);
                 break;
+            case '1':
+                console.log(`ERRO SINTÁTICO - Token inválido na linha ${line}, coluna ${column}.\n Esperado: fim\n Obtido: EOF`);
+                break;
             default:
                 console.log(`ERRO SINTÁTICO - Erro desconhecido na linha ${line}, coluna ${column}`);
                 break;
