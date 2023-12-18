@@ -11,6 +11,11 @@ export class PDA {
     private stack: string[];
     private lexiconObject;
     private lexiconGenerator: Generator;
+    private hasInsertion = false;
+    private insertionToken: Token = {class: '',lex: '',type: ''};
+    private saveStack: string[];
+    private lastToken: Token = {class: '',lex: '',type: ''};
+    private hasErrors = false;
 
     constructor(lexiconGenerator: Generator) {
         this.transitionTable = this.csvConverter.fieldDelimiter(',').getJsonFromCsv(this.TRANSITION_TABLE_FILE_PATH);
@@ -19,61 +24,137 @@ export class PDA {
         this.lexiconGenerator = lexiconGenerator;
         this.lexiconObject = lexiconGenerator.next();
         this.stack = [];
+        this.saveStack = [];
     }
 
-    private getToken(): Token {
-        const token: Token = this.lexiconObject.value
-        this.lexiconObject = this.lexiconGenerator.next();
-        return token;
+    private getToken(): Token
+    {
+
+        if (this.hasInsertion === true)
+        {
+            this.hasInsertion = false
+
+            return this.lastToken;
+        }
+        else
+        {
+            const token: Token = this.lexiconObject.value;
+            this.lexiconObject = this.lexiconGenerator.next();
+            this.lastToken = token;
+            return token;
+        }
+
     }
 
     private getCurrentState() {
         return this.stack[this.stack.length-1];
     }
 
-    private panicMode(token: Token): Token {
-        const recoveryPoints = ['pt_v', 'EOF'];
-
-         while (!recoveryPoints.includes(token?.class)) {
-            token = this.getToken();
-        }
-
-        return token;
-    }
-
-    public parse(){
+    public parse()
+    {
         let token: Token = this.getToken();
         this.stack.push('0');
 
-        do {
+        do
+        {
             const state = this.getCurrentState();
-            const instruction = this.transitionTable[state][token?.class.toLowerCase()]
-            const action = instruction[0];
-            const routine = instruction.substring(1);
+            const tokenClass = token.class.toLowerCase();
+            const hasAction = this.transitionTable[state][tokenClass];
 
-            if (action === 's') {
-                this.stack.push(routine);
-                token = this.getToken();
-            } else if (action === 'r') {
-                const reduce = this.grammar[routine];
-                const rule = Object.keys(reduce)[0];
-                const ruleLength = reduce[rule].length;
+            if (hasAction)
+            {
+                const action = this.transitionTable[state][tokenClass][0];
+                const routine = this.transitionTable[state][tokenClass].substring(1);
 
-                for (let i = 0; i < ruleLength; i++) {
-                    this.stack.pop();
+                if (action === 's')
+                {
+                    this.stack.push(routine);
+
+                    this.saveStack = [...this.stack];
+
+                    token = this.getToken();
                 }
+                else if (action === 'r')
+                {
+                    const reduce = this.grammar[routine];
+                    const rule = Object.keys(reduce)[0];
+                    const ruleLength = reduce[rule].length;
 
-                const goTo = this.transitionTable[this.getCurrentState()][rule];
-                this.stack.push(goTo);
+                    for (let i = 0; i < ruleLength; i++)
+                    {
+                        this.stack.pop();
+                    }
 
-                console.log(rule + ' -> ' + reduce[rule]);
-            } else if (action === 'a') {
-                console.log('ACCEPT');
-                return;
-            } else {
-                Error.syntaxError(token, routine, Error.line, (Error.column - token.lex.length))
-                token = this.panicMode(token);
+                    const goTo = this.transitionTable[this.getCurrentState()][rule];
+                    this.stack.push(goTo);
+
+                    console.log(rule + ' -> ' + reduce[rule]);
+                }
+                else if (action === 'a')
+                {
+                    if (this.hasErrors === false)
+                    {
+                        console.log('ACCEPT');
+                    }
+                    else
+                    {
+                        console.log('FAILED');
+                    }
+                    return;
+                }
+                else
+                {
+                    token = this.try_insertion(token, routine, Error.line, (Error.column - token.lex.length));
+                }
             }
-        } while (!this.lexiconObject.done);
+            else
+            {
+                const line = Error.line
+                const column = Error.column
+                token = this.panicMode(token, Error.line);
+                console.log(`Token: "${token.lex}" linha: ${line-1} coluna: ${column}`);
+            }
+
+        } while (true);
+    }
+
+    private panicMode(token: Token, line: number) : Token
+    {
+        this.hasErrors = true;
+        while (token?.class != 'EOF')
+        {
+            if (token?.class === 'PT_V')
+            {
+                break;
+            }
+            else
+            {
+                if (token?.class === 'varfim' || token?.class === 'fimrepita' || token?.class === 'fimse'  || token?.class === 'fim')
+                {
+                    for (let i = 0; i < 3; i++)
+                    {
+                        this.stack.pop();
+                    }
+                    return token;
+                }
+            }
+            token = this.getToken()
+
+        }
+        return token;
+    }
+
+    public try_insertion(token: Token, code: string, line: number, column: number)
+    {
+        switch (code)
+        {
+            case '0':
+                this.hasInsertion = true;
+                return this.insertionToken = {class: 'inicio',lex: 'inicio',type: 'inicio'};
+            case '4':
+                this.hasInsertion = true;
+                return this.insertionToken = {class: 'varinicio',lex: 'varinicio',type: 'varinicio'};
+        }
+        return this.insertionToken;
     }
 }
