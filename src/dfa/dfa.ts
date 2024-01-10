@@ -1,30 +1,29 @@
 import {Token} from "../lexicon/token";
 import {isKeyword} from "../lexicon/symbols";
+import {Error} from "../error/error";
 
 export class DFA {
-    public line: number;
-    public column: number;
     public state: number;
     public lex: string;
 
     constructor() {
-        this.line = 0;
-        this.column = 0;
+        Error.line = 0
+        Error.column = 0;
         this.state = 0;
         this.lex = '';
     }
 
     public *recognize(input: string): Generator<Token>  {
-        this.line = 1;
+        Error.line = 1;
 
         let float: number = 0
         for (let i = 0; i < input.length; i++) {
 
             if (input[i] === '\n'){
-                this.line++;
-                this.column = -1;
+                Error.line++;
+                Error.column = -1;
             }
-            this.column++;
+            Error.column++;
 
             switch (this.state) {
                 case 0:
@@ -70,7 +69,7 @@ export class DFA {
                         break;
                     } else {
                         this.lex = input[i];
-                        console.log(`ERRO LÉXICO - Caractere inválido na linguagem, linha ${this.line}, coluna ${this.column}`);
+                        Error.lexError(1, Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
@@ -93,7 +92,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -106,7 +105,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -123,7 +122,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -154,7 +153,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -168,7 +167,7 @@ export class DFA {
                         this.lex = '';
                         float = 0;
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -185,7 +184,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -199,7 +198,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -218,7 +217,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -227,7 +226,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 11:
@@ -235,7 +234,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 12:
@@ -243,7 +242,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 13:
@@ -251,7 +250,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 14:
@@ -263,7 +262,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -272,7 +271,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 17:
@@ -280,7 +279,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 18:
@@ -288,7 +287,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 19:
@@ -306,12 +305,12 @@ export class DFA {
                         this.state = 21;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        console.log(`ERRO LÉXICO - O literal nunca termina, linha ${this.line}, coluna ${this.column}`);
+                        Error.lexError(2, Error.line, Error.column);
                         yield {class: 'LIT', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     } else {
                         this.state = 20;
                         this.lex += input[i];
@@ -323,7 +322,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 22:
@@ -339,7 +338,7 @@ export class DFA {
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     }
                     break;
 
@@ -348,7 +347,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 24:
@@ -356,7 +355,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
 
                 case 25:
@@ -374,12 +373,12 @@ export class DFA {
                         this.state = 27;
                         this.lex += input[i];
                     } else if (input[i+1] === undefined) {
-                        console.log(`ERRO LÉXICO - O comentário nunca termina, linha ${this.line}, coluna ${this.column}`);
+                        Error.lexError(3, Error.line, Error.column);
                         yield {class: 'ERROR', lex: this.lex, type: null}
                         this.state = 0;
                         this.lex = '';
                         i--;
-                        this.column--;
+                        Error.column--;
                     } else {
                         this.state = 26;
                         this.lex += input[i];
@@ -391,7 +390,7 @@ export class DFA {
                     this.state = 0;
                     this.lex = '';
                     i--;
-                    this.column--;
+                    Error.column--;
                     break;
             }
         }

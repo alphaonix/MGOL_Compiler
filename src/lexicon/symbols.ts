@@ -44,6 +44,12 @@ export function isPresent(lex: string): boolean {
     return false;
 }
 
+export function getTokenFromTable(lex: string) {
+    for (const token of symbolsTable) {
+        if (token.lex === lex) return token;
+    }
+}
+
 export function printSymbolsTable() {
     for (const token of symbolsTable) {
         console.log('Classe: ' + token.class +

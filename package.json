@@ -7,6 +7,7 @@
   "author": "Mickael Mesquita",
   "license": "MIT",
   "dependencies": {
+    "convert-csv-to-json": "^2.0.0",
     "dom": "^0.0.3",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
@@ -15,5 +16,8 @@
   },
   "scripts": {
     "dev": "nodemon src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5"
   }
 }
