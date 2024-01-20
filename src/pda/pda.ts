@@ -1,6 +1,7 @@
 import {Grammar, grammar} from "./grammar";
 import {Token} from "../lexicon/token";
 import {Error} from "../error/error";
+import {semantic} from "../semantic/semantic";
 
 export class PDA {
     private readonly TRANSITION_TABLE_FILE_PATH = 'src/pda/states/ShiftReduce-Table.csv';
@@ -16,6 +17,7 @@ export class PDA {
     private saveStack: string[];
     private lastToken: Token = {class: '',lex: '',type: ''};
     private hasErrors = false;
+    private sem;
 
     constructor(lexiconGenerator: Generator) {
         this.transitionTable = this.csvConverter.fieldDelimiter(',').getJsonFromCsv(this.TRANSITION_TABLE_FILE_PATH);
@@ -25,6 +27,7 @@ export class PDA {
         this.lexiconObject = lexiconGenerator.next();
         this.stack = [];
         this.saveStack = [];
+        this.sem = new semantic(lexiconGenerator);
     }
 
     private getToken(): Token
@@ -68,9 +71,9 @@ export class PDA {
 
                 if (action === 's')
                 {
-                    this.stack.push(routine);
+                    this.sem.semanticStack.push(token);
 
-                    this.saveStack = [...this.stack];
+                    this.stack.push(routine);
 
                     token = this.getToken();
                 }
@@ -89,16 +92,22 @@ export class PDA {
                     this.stack.push(goTo);
 
                     console.log(rule + ' -> ' + reduce[rule]);
+        
                 }
                 else if (action === 'a')
                 {
                     if (this.hasErrors === false)
                     {
                         console.log('ACCEPT');
+
+                        this.sem.semantic_construction();
+
+                        console.log('programa.c created successfully');
                     }
                     else
                     {
                         console.log('FAILED');
+                        console.log('programa.c created unsuccessfully');
                     }
                     return;
                 }
