@@ -9,6 +9,7 @@ export class DFA {
     constructor() {
         Error.line = 0
         Error.column = 0;
+        Error.hasError = false;
         this.state = 0;
         this.lex = '';
     }

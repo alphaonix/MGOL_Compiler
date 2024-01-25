@@ -15,13 +15,11 @@ export class PDA {
     private hasInsertion = false;
     private insertionToken: Token = {class: '',lex: '',type: ''};
     private lastToken: Token = {class: '',lex: '',type: ''};
-    private hasErrors = false;
     private semantic;
 
     constructor(lexiconGenerator: Generator) {
         this.transitionTable = this.csvConverter.fieldDelimiter(',').getJsonFromCsv(this.TRANSITION_TABLE_FILE_PATH);
         this.grammar = grammar;
-
         this.lexiconGenerator = lexiconGenerator;
         this.lexiconObject = lexiconGenerator.next();
         this.stack = [];
@@ -61,36 +59,35 @@ export class PDA {
 
                 if (action === 's') {
                     this.stack.push(routine);
-                    token = this.getToken();
                     this.semantic.stack.push(token);
+                    token = this.getToken();
                 }
                 else if (action === 'r') {
-
                     const reduce = this.grammar[routine];
                     const rule = Object.keys(reduce)[0];
                     const ruleLength = reduce[rule].length;
 
+                    this.semantic.rule(routine, ruleLength, token);
+
                     for (let i = 0; i < ruleLength; i++) {
                         this.stack.pop();
+                        this.semantic.stack.pop();
                     }
-
-                    this.semantic.rule(routine,ruleLength,token);
 
                     const goTo = this.transitionTable[this.getCurrentState()][rule];
                     this.stack.push(goTo);
-
                     //console.log(rule + ' -> ' + reduce[rule]);
                 }
                 else if (action === 'a') {
                     
-                    if (this.hasErrors === false) {
+                    if (Error.hasError === false) {
                         console.log('ACCEPT');
                         this.semantic.body_construction();
-                        console.log('programa.c created successfully');
+                        console.log('program.c created successfully');
                     }
                     else {
                         console.log('FAILED');
-                        console.log('programa.c created unsuccessfully');
+                        console.log('program.c created unsuccessfully');
                     }
                     return;
                 }
@@ -109,7 +106,7 @@ export class PDA {
     }
 
     private panicMode(token: Token, line: number) : Token {
-        this.hasErrors = true;
+        Error.hasError = true;
 
         while (token?.class != 'EOF') {
             if (token?.class === 'PT_V') {
