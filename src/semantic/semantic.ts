@@ -1,8 +1,9 @@
 import { getTokenFromTable, symbolsTable } from "../lexicon/symbols";
 import { Token } from "../lexicon/token";
 
+const OUT_PATH = 'output/program.c'
 const fs = require('fs');
-fs.writeFileSync('programa.c','');
+fs.writeFileSync(OUT_PATH,'');
 
 const body = {
     header: [
@@ -42,28 +43,28 @@ export class Semantic {
     body_construction () {
         
         for (let i = 0; i < this.output.header.length; i++) {
-            fs.appendFileSync('programa.c', this.output.header[i]);
-            fs.appendFileSync('programa.c', '\n');
+            fs.appendFileSync(OUT_PATH, this.output.header[i]);
+            fs.appendFileSync(OUT_PATH, '\n');
         }        
 
         for (let i = 0; i < this.output.tempVars.length; i++) {
-            fs.appendFileSync('programa.c', this.output.tempVars[i]);
-            fs.appendFileSync('programa.c', '\n');
+            fs.appendFileSync(OUT_PATH, this.output.tempVars[i]);
+            fs.appendFileSync(OUT_PATH, '\n');
         } 
 
         for (let i = 0; i < this.output.vars.length; i++) {
-            fs.appendFileSync('programa.c', this.output.vars[i]);
-            fs.appendFileSync('programa.c', '\n');
+            fs.appendFileSync(OUT_PATH, this.output.vars[i]);
+            fs.appendFileSync(OUT_PATH, '\n');
         } 
 
         for (let i = 0; i < this.output.code.length; i++) {
-            fs.appendFileSync('programa.c', this.output.code[i]);
-            fs.appendFileSync('programa.c', '\n');
+            fs.appendFileSync(OUT_PATH, this.output.code[i]);
+            fs.appendFileSync(OUT_PATH, '\n');
         } 
 
         for (let i = 0; i < this.output.end.length; i++) {
-            fs.appendFileSync('programa.c', this.output.end[i]);
-            fs.appendFileSync('programa.c', '\n');
+            fs.appendFileSync(OUT_PATH, this.output.end[i]);
+            fs.appendFileSync(OUT_PATH, '\n');
         } 
     }
 

@@ -13,15 +13,12 @@ int T3;
 int T4;
 /*------------------------------*/
 literal A;
-int B;
-int D;
-double C;
+null D;
+real C;
 
 printf("%s","Digite B");
 scanf("%d", &B);
-printf("%s","Digite C");
-scanf("%lf", &C);
-printf("%s","Digite A");
+printf("%s","Digite A:");
 scanf("%s", A);
 T0=B>2;
 T1=B<=4;
@@ -35,9 +32,7 @@ B=T4;
 B=;;
 5.0=;;
 printf("%s","\nB=\n");
-printf("%d",D);
 printf("%s","\n");
-printf("%lf",C);
 printf("%s","\n");
 printf("%s",A);
 
