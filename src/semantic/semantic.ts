@@ -7,16 +7,16 @@ fs.writeFileSync(OUT_PATH,'');
 
 const body = {
     header: [
-    '#include<stdio.h>',
+    '#include <stdio.h>',
     'typedef char literal[256];',
     'void main(void)', 
     '{'
     ],
     tempVars: [
-        '/*----variaveis temporarias----*/'
+        '// temp vars'
     ],
     vars: [
-        '/*------------------------------*/'
+        '// vars'
     ],
     code: [
         ''

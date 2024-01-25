@@ -1,8 +1,8 @@
-#include<stdio.h>
+#include <stdio.h>
 typedef char literal[256];
 void main(void)
 {
-/*----variaveis temporarias----*/
+// temp vars
 
 
 
@@ -11,7 +11,7 @@ int T1;
 int T2;
 int T3;
 int T4;
-/*------------------------------*/
+// vars
 literal A;
 null D;
 real C;
