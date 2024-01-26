@@ -23,7 +23,6 @@ const body = {
         ''
     ],
     end: [
-        '',
         '}'
     ]
 }
@@ -153,13 +152,12 @@ export class Semantic {
                 } else if (this.latestArg.type === 'real') {
                     this.output.code.push(`printf("%lf", ${this.latestArg.lex});`)
                 } else {
-                    this.output.code.push(`printf("${this.latestArg.lex}");`)
+                    this.output.code.push(`printf("%s", ${this.latestArg.lex});`)
                 }
                 break;
 
             case '15': // ARG -> lit
                 this.latestArg = this.stack[top];
-                this.latestArg.lex = this.latestArg.lex.replace(/"/g, '');
                 break;
 
             case '16': // ARG -> num
