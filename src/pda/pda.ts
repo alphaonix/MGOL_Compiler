@@ -67,7 +67,7 @@ export class PDA {
                     const rule = Object.keys(reduce)[0];
                     const ruleLength = reduce[rule].length;
 
-                    this.semantic.rule(routine, ruleLength, token);
+                    this.semantic.rule(routine);
 
                     for (let i = 0; i < ruleLength; i++) {
                         this.stack.pop();

@@ -83,7 +83,7 @@ export class Semantic {
         this.count++
     }
 
-    rule (routine: string, ruleLength: number, tokenX: Token) {
+    rule (routine: string) {
         const top = this.stack.length - 1;
         let id: Token;
         switch (routine) {
