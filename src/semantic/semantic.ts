@@ -177,8 +177,6 @@ export class Semantic {
                 break;
 
             case '20': // LD -> OPRD opm OPRD
-                console.log(this.stack)
-                console.log(this.latestOprd)
                 for (let i = 0; i < this.latestOprd.length; i++) {
                     if (this.latestOprd[i].type === 'literal'
                         || (this.latestOprd[0].type !== this.latestOprd[i].type)) {
@@ -232,9 +230,7 @@ export class Semantic {
                 break;
 
             case '26': // COND -> CAB CP
-                const latestTempVar = this.output.tempVars.length - 1;
-                const tx = this.output.tempVars[latestTempVar][4] + this.output.tempVars[latestTempVar][5];
-                this.output.code.push(`if(T${this.count-1})`);
+                this.output.code.push(`if(T${this.count-1})\n{`);
                 break;
 
             case '27': // EXP_R -> OPRD opr OPRD
@@ -248,6 +244,16 @@ export class Semantic {
                 this.output.code.push(`T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex};`);
                 this.newTempVar(this.latestOprd[0].type);
                 this.latestOprd = [];
+                break;
+
+            case '33': // R -> CABR CPR
+                this.output.code.push(`}`);
+                break;
+
+            case '34':
+                console.log(this.stack)
+                console.log(this.latestOprd)
+                this.output.code.push(`while(T${this.count-1})\n{`);
                 break;
         }
     }
