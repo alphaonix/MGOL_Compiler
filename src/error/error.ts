@@ -28,6 +28,13 @@ export class Error {
             case 1:
                 console.log(`Erro: Variável não declarada. linha ${line}, coluna ${column}`)
                 break;
+            case 2:
+                console.log(`Erro: Operandos com tipos incompatíveis. linha ${line}, coluna ${column}`)
+                break;
+
+            case 3:
+                console.log(`Erro: Tipos diferentes para atribuição. linha ${line}, coluna ${column}`)
+                break;
         }
     }
 }
