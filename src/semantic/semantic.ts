@@ -87,7 +87,6 @@ export class Semantic {
     rule (routine: string, ruleLength: number, tokenX: Token) {
         const top = this.stack.length - 1;
         let id: Token;
-        console.log(routine)
         switch (routine) {
             case '7': // L -> id vir L
                 for (let token of this.stack) {
@@ -242,8 +241,6 @@ export class Semantic {
                     this.latestOprd = [];
                     break;
                 }
-                console.log(this.stack)
-                console.log(this.latestOprd)
                 const opr = this.stack[top];
                 this.output.code.push(`T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex};`);
                 this.latestExpR = `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex}`;
@@ -258,33 +255,6 @@ export class Semantic {
             case '34': // CABR -> repita ab_p EXP_R fc_p
                 this.output.code.push(`while(T${this.count-1})\n{`);
                 break;
-        }
-    }
-}
-
-//function debug
-function d(message: any) {
-    console.log(message);
-}
-
-function dv(message: string, value: any) {
-    console.log(message+value);
-}
-
-function ds(stack: any[])
-{
-    stack.forEach((item, index) => {
-        console.log(`Index ${index}:`, item);
-    });
-}
-
-function setType(lex: string,type: string | null) {
-
-    for (let i = 0; i < symbolsTable.length; i++) {
-        if (symbolsTable[i].lex === lex)
-        {
-            symbolsTable[i].type = type;
-            break;
         }
     }
 }
