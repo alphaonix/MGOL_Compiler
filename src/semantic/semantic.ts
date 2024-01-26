@@ -34,6 +34,7 @@ export class Semantic {
     private output;
 
     private latestType: string;
+    private latestExpR: string;
     private latestArg: Token;
     private latestOprd: Token[];
 
@@ -43,6 +44,7 @@ export class Semantic {
         this.count = 0;
 
         this.latestType = '';
+        this.latestExpR = '';
         this.latestArg = {class: '', lex: '', type: ''};
         this.latestOprd = [];
     }
@@ -240,19 +242,20 @@ export class Semantic {
                     this.latestOprd = [];
                     break;
                 }
+                console.log(this.stack)
+                console.log(this.latestOprd)
                 const opr = this.stack[top];
                 this.output.code.push(`T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex};`);
+                this.latestExpR = `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex}`;
                 this.newTempVar(this.latestOprd[0].type);
                 this.latestOprd = [];
                 break;
 
             case '33': // R -> CABR CPR
-                this.output.code.push(`}`);
+                this.output.code.push(`${this.latestExpR};\n}`);
                 break;
 
-            case '34':
-                console.log(this.stack)
-                console.log(this.latestOprd)
+            case '34': // CABR -> repita ab_p EXP_R fc_p
                 this.output.code.push(`while(T${this.count-1})\n{`);
                 break;
         }
