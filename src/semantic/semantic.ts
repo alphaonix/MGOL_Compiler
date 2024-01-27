@@ -120,7 +120,6 @@ export class Semantic {
 
         switch (routine) {
             case '7': // L -> id vir L
-                    console.log("Stack ",this.stack);
                 for (let token of this.stack) {
                     if (token.class === 'ID') {
                         token.type = this.latestType;
@@ -274,11 +273,15 @@ export class Semantic {
                 break;
 
             case '33': // R -> CABR CPR
-                this.output.code.push(generate_Tabs(this.recoil) + `${this.latestExpR};\n}`);
+                this.output.code.push(generate_Tabs(this.recoil) + `${this.latestExpR};`);
+                this.recoil--;
+                this.output.code.push(generate_Tabs(this.recoil) + `}`);
                 break;
 
             case '34': // CABR -> repita ab_p EXP_R fc_p
-                this.output.code.push(generate_Tabs(this.recoil) + `while(T${this.count-1})\n{`);
+                this.output.code.push(generate_Tabs(this.recoil) + `while(T${this.count-1})`);
+                this.output.code.push(generate_Tabs(this.recoil) + `{`);
+                this.recoil++;
                 break;
         }
     }
