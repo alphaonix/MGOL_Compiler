@@ -76,7 +76,7 @@ export class PDA {
 
                     const goTo = this.transitionTable[this.getCurrentState()][rule];
                     this.stack.push(goTo);
-                    console.log(rule + ' -> ' + reduce[rule]);
+                    //console.log(rule + ' -> ' + reduce[rule]);
                 }
                 else if (action === 'a') {
                     

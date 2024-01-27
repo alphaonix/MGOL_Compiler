@@ -1,4 +1,4 @@
-import {symbolsTable} from "../lexicon/symbols";
+import {loadKeywordSymbols, symbolsTable} from "../lexicon/symbols";
 import { Token } from "../lexicon/token";
 import {Error} from "../error/error";
 
@@ -31,6 +31,8 @@ export class Semantic {
     public stack: Token[];
     private count: number;
     private output;
+    private control : boolean = false;
+    public recoil : number = 1;
 
     private latestType: string;
     private latestExpR: string;
@@ -77,29 +79,59 @@ export class Semantic {
     }
 
     newTempVar (type: any) {
-        type === 'inteiro' ? type = 'int' : type = 'double';
+        type === 'int' ? type = 'int' : type = 'double';
+
+        let aux = this.recoil;
+
+        if (aux >= 2)
+        {
+            aux = 1;
+        }
+
         const varTemp = 'T' + this.count.toString();
-        this.output['tempVars'].push(type + ' ' + varTemp + ';')
+        this.output['tempVars'].push(generate_Tabs(aux) + type + ' ' + varTemp + ';')
+        
         this.count++
+    }
+
+    generate_scanf (id : any) {
+        if (id.type === 'int') {
+            this.output.code.push(generate_Tabs(this.recoil) + `scanf("%d", &${id.lex});`);
+        } else if (id.type === 'double') {
+            this.output.code.push(generate_Tabs(this.recoil) + `scanf("%lf", &${id.lex});`);
+        } else {
+            this.output.code.push(generate_Tabs(this.recoil) + `scanf("%s", ${id.lex});`);
+        }
+    }
+
+    generate_printf () {
+        if (this.latestArg.type === 'int') {
+            this.output.code.push(generate_Tabs(this.recoil) + `printf("%d", ${this.latestArg.lex});`)
+        } else if (this.latestArg.type === 'double') {
+            this.output.code.push(generate_Tabs(this.recoil) + `printf("%lf", ${this.latestArg.lex});`)
+        } else if (this.latestArg.type === 'literal') {
+            this.control === true ? this.output.code.push(generate_Tabs(this.recoil) + `printf("%s", ${this.latestArg.lex});`) : this.output.code.push(generate_Tabs(this.recoil) + `printf("${this.latestArg.lex}");`);
+        } 
     }
 
     rule (routine: string) {
         const top = this.stack.length - 1;
         let id: Token;
+
         switch (routine) {
             case '7': // L -> id vir L
+                    console.log("Stack ",this.stack);
                 for (let token of this.stack) {
                     if (token.class === 'ID') {
                         token.type = this.latestType;
-                        let cType = '';
                         if (token.type === 'inteiro') {
-                            cType = 'int ';
+                            token.type = 'int';
                         } else if (token.type === 'real') {
-                            cType = 'double ';
+                            token.type = 'double';
                         } else {
-                            cType = 'literal ';
+                            token.type = 'literal';
                         }
-                        this.output.vars.push(cType + token.lex + ';')
+                        this.output.vars.push(generate_Tabs(this.recoil) + token.type + ' ' + token.lex + ';')
                     }
                 }
                 break;
@@ -107,15 +139,14 @@ export class Semantic {
             case '8': // L -> id
                 id = this.stack[top];
                 id.type = this.latestType;
-                let cType = '';
                 if (id.type === 'inteiro') {
-                    cType = 'int ';
+                    id.type = 'int';
                 } else if (id.type === 'real') {
-                    cType = 'double ';
+                    id.type = 'double';
                 } else {
-                    cType = 'literal ';
-                }
-                this.output.vars.push(cType + this.stack[top].lex + ';')
+                    id.type = 'literal';
+                }            
+                this.output.vars.push(generate_Tabs(this.recoil) + id.type + ' ' + this.stack[top].lex + ';');
                 break;
 
             case '9': // TIPO -> inteiro
@@ -137,27 +168,17 @@ export class Semantic {
                     Error.semanticError(1, Error.line, Error.column);
                     break;
                 }
-                if (id.type === 'inteiro') {
-                    this.output.code.push(`scanf("%d", &${id.lex});`);
-                } else if (id.type === 'real') {
-                    this.output.code.push(`scanf("%lf", &${id.lex});`);
-                } else {
-                    this.output.code.push(`scanf("%s", ${id.lex});`);
-                }
+                this.generate_scanf(id);
                 break;
 
             case '14': // ES -> escreva ARG pt_v
-                if (this.latestArg.type === 'inteiro') {
-                    this.output.code.push(`printf("%d", ${this.latestArg.lex});`)
-                } else if (this.latestArg.type === 'real') {
-                    this.output.code.push(`printf("%lf", ${this.latestArg.lex});`)
-                } else {
-                    this.output.code.push(`printf("%s", ${this.latestArg.lex});`)
-                }
+                this.generate_printf();
+                this.control = false;
                 break;
 
             case '15': // ARG -> lit
                 this.latestArg = this.stack[top];
+                this.latestArg.lex = this.latestArg.lex.replace(/"/g, '');
                 break;
 
             case '16': // ARG -> num
@@ -171,6 +192,7 @@ export class Semantic {
                     Error.semanticError(1, Error.line, Error.column);
                     break;
                 }
+                this.control = true;
                 this.latestArg = this.stack[top];
                 this.latestArg.lex = this.latestArg.lex.replace(/"/g, '');
                 break;
@@ -192,8 +214,8 @@ export class Semantic {
                     return;
                 }
                 const opm = this.stack[2];
-                this.output.code.push(`T${this.count}=${this.latestOprd[0].lex}${opm.lex}${this.latestOprd[1].lex};`);
-                this.output.code.push(`${id.lex}=T${this.count};`);
+                this.output.code.push(generate_Tabs(this.recoil) + `T${this.count}=${this.latestOprd[0].lex}${opm.lex}${this.latestOprd[1].lex};`);
+                this.output.code.push(generate_Tabs(this.recoil) + `${id.lex}=T${this.count};`);
                 this.newTempVar(this.latestOprd[0].type);
                 this.latestOprd = [];
                 break;
@@ -205,7 +227,7 @@ export class Semantic {
                     this.latestOprd = [];
                     break;
                 }
-                this.output.code.push(`${this.stack[0].lex}=${this.latestOprd[0].lex};`);
+                this.output.code.push(generate_Tabs(this.recoil) + `${this.stack[0].lex}=${this.latestOprd[0].lex};`);
                 this.latestOprd = [];
                 break;
 
@@ -220,16 +242,20 @@ export class Semantic {
 
             case '23': // OPRD -> num
                 const tk = this.stack[top];
-                tk.type === 'int' ? tk.type = 'inteiro' : tk.type = 'real';
+                tk.type === 'inteiro' ? tk.type = 'int' : tk.type = 'double';
                 this.latestOprd.push(tk);
                 break;
 
             case '25': // COND -> CAB CP
-                this.output.code.push(`}`);
+                this.recoil--;
+                this.output.code.push(generate_Tabs(this.recoil) + `}`);
+                //this.count--;
                 break;
 
             case '26': // COND -> CAB CP
-                this.output.code.push(`if(T${this.count-1})\n{`);
+                this.output.code.push(generate_Tabs(this.recoil) + `if(T${this.count-1})`);
+                this.output.code.push(generate_Tabs(this.recoil) + `{`);
+                this.recoil++;
                 break;
 
             case '27': // EXP_R -> OPRD opr OPRD
@@ -239,20 +265,25 @@ export class Semantic {
                     this.latestOprd = [];
                     break;
                 }
+                
                 const opr = this.stack[top];
-                this.output.code.push(`T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex};`);
+                this.output.code.push(generate_Tabs(this.recoil) + `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex};`);
                 this.latestExpR = `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex}`;
                 this.newTempVar(this.latestOprd[0].type);
                 this.latestOprd = [];
                 break;
 
             case '33': // R -> CABR CPR
-                this.output.code.push(`${this.latestExpR};\n}`);
+                this.output.code.push(generate_Tabs(this.recoil) + `${this.latestExpR};\n}`);
                 break;
 
             case '34': // CABR -> repita ab_p EXP_R fc_p
-                this.output.code.push(`while(T${this.count-1})\n{`);
+                this.output.code.push(generate_Tabs(this.recoil) + `while(T${this.count-1})\n{`);
                 break;
         }
     }
+}
+
+function generate_Tabs (tabCount: number) {
+    return '\t'.repeat(tabCount);
 }

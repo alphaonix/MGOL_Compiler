@@ -89,7 +89,7 @@ export class DFA {
                         this.state = 4;
                         this.lex += input[i];
                     } else {
-                        yield {class: 'NUM', lex: this.lex, type: 'int'}
+                        yield {class: 'NUM', lex: this.lex, type: 'inteiro'}
                         this.state = 0;
                         this.lex = '';
                         i--;
@@ -118,7 +118,7 @@ export class DFA {
                         this.state = 4;
                         this.lex += input[i];
                     } else {
-                        yield {class: 'NUM', lex: this.lex, type: (float === 1) ? 'double' : 'int'}
+                        yield {class: 'NUM', lex: this.lex, type: (float === 1) ? 'real' : 'inteiro'}
                         float = 0;
                         this.state = 0;
                         this.lex = '';
@@ -163,7 +163,7 @@ export class DFA {
                         this.state = 6;
                         this.lex += input[i];
                     } else {
-                        yield {class: 'NUM', lex: this.lex, type: (float === 1) ? 'double' : 'int'}
+                        yield {class: 'NUM', lex: this.lex, type: (float === 1) ? 'real' : 'inteiro'}
                         this.state = 0;
                         this.lex = '';
                         float = 0;
@@ -181,7 +181,7 @@ export class DFA {
                         this.state = 8;
                         this.lex += input[i];
                     } else {
-                        yield {class: 'NUM', lex: this.lex, type: "int"}
+                        yield {class: 'NUM', lex: this.lex, type: "inteiro"}
                         this.state = 0;
                         this.lex = '';
                         i--;
