@@ -83,7 +83,7 @@ export class Semantic {
 
         let aux = this.recoil;
 
-        if (aux >= 2)
+        if (aux > 1)
         {
             aux = 1;
         }
