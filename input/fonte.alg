@@ -1,8 +1,8 @@
 inicio
     varinicio
-        literal A;
-        inteiro B,D;
-        real C ;
+        literal A,G,K;
+        inteiro B,D,K,E;
+        real C;
     varfim;
 
     escreva "Digite B";

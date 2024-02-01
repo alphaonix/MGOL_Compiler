@@ -120,43 +120,33 @@ export class Semantic {
         let id: Token;
 
         switch (routine) {
-            case '6': //D -> TIPO L pt_v
-            
-                if (this.latestType === 'inteiro') {
-                    this.latestType = 'int';
-                } else if (this.latestType === 'real') {
-                    this.latestType = 'double';
-                } else {
-                    this.latestType = 'literal';
-                }         
-                break;
-
+           
             case '7': // L -> id vir L
+            id = this.stack[top];
             if (this.controlRule === true)
             {
+                this.controlRule = false;
                 break;
             }
-            this.controlRule = true;
-            id = this.stack[top];
-            
-                for (let token of this.stack) {
-                    if (token.class === 'ID') {
-                        token.type = this.latestType;
-                        if (token.type === 'inteiro') {
-                            token.type = 'int';
-                        } else if (token.type === 'real') {
-                            token.type = 'double';
-                        } else {
-                            token.type = 'literal';
-                        }
-                        this.output.vars.push(generate_Tabs(this.recoil) + token.type + ' ' + token.lex + ';')
+
+            for (let token of this.stack) {
+                if (token.class === 'ID') {
+                    token.type = this.latestType;
+                    if (token.type === 'inteiro') {
+                        token.type = 'int';
+                    } else if (token.type === 'real') {
+                        token.type = 'double';
+                    } else {
+                        token.type = 'literal';
                     }
+                    this.output.vars.push(generate_Tabs(this.recoil) + token.type + ' ' + token.lex + ';')
                 }
-                break;
+            }
+            this.controlRule = true;
+            break;
 
             case '8': // L -> id
                 id = this.stack[top];
-                console.log(this.stack);
                 id.type = this.latestType;
                 if (id.type === 'inteiro') {
                     id.type = 'int';
