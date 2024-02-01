@@ -124,6 +124,15 @@ export class Semantic {
         }
     }
 
+    isAlreadyDefined(lex: string): boolean {
+        for (let line of this.output.vars) {
+            if (line.includes(lex)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     rule (routine: string) {
         const top = this.stack.length - 1;
         let id: Token;
@@ -142,6 +151,11 @@ export class Semantic {
                 if (token.class === 'ID') {
                     token.type = this.latestType;
                     const cType = this.getConvertedType(token.type)
+                    if (this.isAlreadyDefined(token.lex)) {
+                        Error.hasError = true;
+                        Error.semanticError(4, Error.line, Error.column)
+                        break;
+                    }
                     this.output.vars.push(generate_Tabs(this.recoil) + cType + token.lex + ';')
                 }
             }
@@ -152,6 +166,11 @@ export class Semantic {
                 id = this.stack[top];
                 id.type = this.latestType;
                 const cType = this.getConvertedType(id.type)
+                if (this.isAlreadyDefined(id.lex)) {
+                    Error.hasError = true;
+                    Error.semanticError(4, Error.line, Error.column)
+                    break;
+                }
                 this.output.vars.push(generate_Tabs(this.recoil) + cType + this.stack[top].lex + ';');
                 break;
 
@@ -263,7 +282,7 @@ export class Semantic {
                 break;
 
             case '27': // EXP_R -> OPRD opr OPRD
-                if (this.latestOprd[0].type !== this.latestOprd[1].type) {
+                if (this.latestOprd[0].type !== this.latestOprd[1]?.type) {
                     Error.hasError = true;
                     Error.semanticError(2, Error.line, Error.column);
                     this.latestOprd = [];

@@ -31,9 +31,11 @@ export class Error {
             case 2:
                 console.log(`Erro: Operandos com tipos incompatíveis. linha ${line}, coluna ${column}`)
                 break;
-
             case 3:
                 console.log(`Erro: Tipos diferentes para atribuição. linha ${line}, coluna ${column}`)
+                break;
+            case 4:
+                console.log(`Erro: Variável já declarada. linha ${line}, coluna ${column}`)
                 break;
         }
     }
