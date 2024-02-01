@@ -79,7 +79,7 @@ export class Semantic {
     }
 
     newTempVar (type: any) {
-        type === 'int' ? type = 'int' : type = 'double';
+        type === 'inteiro' ? type = 'int' : type = 'double';
 
         let aux = this.recoil;
 
@@ -95,9 +95,9 @@ export class Semantic {
     }
 
     generate_scanf (id : any) {
-        if (id.type === 'int') {
+        if (id.type === 'inteiro') {
             this.output.code.push(generate_Tabs(this.recoil) + `scanf("%d", &${id.lex});`);
-        } else if (id.type === 'double') {
+        } else if (id.type === 'real') {
             this.output.code.push(generate_Tabs(this.recoil) + `scanf("%lf", &${id.lex});`);
         } else {
             this.output.code.push(generate_Tabs(this.recoil) + `scanf("%s", ${id.lex});`);
@@ -105,9 +105,9 @@ export class Semantic {
     }
 
     generate_printf () {
-        if (this.latestArg.type === 'int') {
+        if (this.latestArg.type === 'inteiro') {
             this.output.code.push(generate_Tabs(this.recoil) + `printf("%d", ${this.latestArg.lex});`)
-        } else if (this.latestArg.type === 'double') {
+        } else if (this.latestArg.type === 'real') {
             this.output.code.push(generate_Tabs(this.recoil) + `printf("%lf", ${this.latestArg.lex});`)
         } else if (this.latestArg.type === 'literal') {
             this.control === true ? this.output.code.push(generate_Tabs(this.recoil) + `printf("%s", ${this.latestArg.lex});`) : this.output.code.push(generate_Tabs(this.recoil) + `printf("${this.latestArg.lex}");`);
@@ -131,14 +131,15 @@ export class Semantic {
             for (let token of this.stack) {
                 if (token.class === 'ID') {
                     token.type = this.latestType;
+                    let cType = '';
                     if (token.type === 'inteiro') {
-                        token.type = 'int';
+                        cType = 'int ';
                     } else if (token.type === 'real') {
-                        token.type = 'double';
+                        cType = 'double ';
                     } else {
-                        token.type = 'literal';
+                        cType = 'literal ';
                     }
-                    this.output.vars.push(generate_Tabs(this.recoil) + token.type + ' ' + token.lex + ';')
+                    this.output.vars.push(generate_Tabs(this.recoil) + cType + token.lex + ';')
                 }
             }
             this.controlRule = true;
@@ -147,15 +148,16 @@ export class Semantic {
             case '8': // L -> id
                 id = this.stack[top];
                 id.type = this.latestType;
+                let cType = '';
                 if (id.type === 'inteiro') {
-                    id.type = 'int';
+                    cType = 'int ';
                 } else if (id.type === 'real') {
-                    id.type = 'double';
+                    cType = 'double ';
                 } else {
-                    id.type = 'literal';
-                } 
+                    cType = 'literal ';
+                }
                         
-                this.output.vars.push(generate_Tabs(this.recoil) + id.type + ' ' + this.stack[top].lex + ';');
+                this.output.vars.push(generate_Tabs(this.recoil) + cType + this.stack[top].lex + ';');
                 break;
 
             case '9': // TIPO -> inteiro
@@ -251,7 +253,6 @@ export class Semantic {
 
             case '23': // OPRD -> num
                 const tk = this.stack[top];
-                tk.type === 'inteiro' ? tk.type = 'int' : tk.type = 'double';
                 this.latestOprd.push(tk);
                 break;
 

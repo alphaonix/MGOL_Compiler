@@ -5,9 +5,9 @@ inicio
         real C;
     varfim;
 
-    escreva "Digite B";
+    escreva "Digite B: ";
     leia B;
-    escreva "Digite A:";
+    escreva "Digite A: ";
     leia A;
     se(B>2)
     entao
