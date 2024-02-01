@@ -269,10 +269,11 @@ export class Semantic {
                     this.latestOprd = [];
                     break;
                 }
-                
                 const opr = this.stack[top];
                 this.output.code.push(generate_Tabs(this.recoil) + `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex};`);
-                this.latestExpR = `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex}`;
+                if (this.stack[0].lex === 'repita') {
+                    this.latestExpR = `T${this.count}=${this.latestOprd[0].lex}${opr.lex}${this.latestOprd[1].lex}`;
+                }
                 this.newTempVar(this.latestOprd[0].type);
                 this.latestOprd = [];
                 break;

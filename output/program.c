@@ -68,7 +68,7 @@ void main(void){
 		printf("%d", D);
 		T11=B+1;
 		B=T11;
-		T10=D>=3;
+		T5=B<5;
 	}
 	printf("\nB=\n");
 	printf("%d", D);
