@@ -114,6 +114,16 @@ export class Semantic {
         } 
     }
 
+    getConvertedType(type: string): string {
+        if (type === 'inteiro') {
+            return 'int ';
+        } else if (type === 'real') {
+            return 'double ';
+        } else {
+            return  'literal ';
+        }
+    }
+
     rule (routine: string) {
         const top = this.stack.length - 1;
         let id: Token;
@@ -131,14 +141,7 @@ export class Semantic {
             for (let token of this.stack) {
                 if (token.class === 'ID') {
                     token.type = this.latestType;
-                    let cType = '';
-                    if (token.type === 'inteiro') {
-                        cType = 'int ';
-                    } else if (token.type === 'real') {
-                        cType = 'double ';
-                    } else {
-                        cType = 'literal ';
-                    }
+                    const cType = this.getConvertedType(token.type)
                     this.output.vars.push(generate_Tabs(this.recoil) + cType + token.lex + ';')
                 }
             }
@@ -148,15 +151,7 @@ export class Semantic {
             case '8': // L -> id
                 id = this.stack[top];
                 id.type = this.latestType;
-                let cType = '';
-                if (id.type === 'inteiro') {
-                    cType = 'int ';
-                } else if (id.type === 'real') {
-                    cType = 'double ';
-                } else {
-                    cType = 'literal ';
-                }
-                        
+                const cType = this.getConvertedType(id.type)
                 this.output.vars.push(generate_Tabs(this.recoil) + cType + this.stack[top].lex + ';');
                 break;
 
