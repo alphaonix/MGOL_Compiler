@@ -1,7 +1,6 @@
 #include <stdio.h>
 typedef char literal[256];
-void main(void)
-{
+void main(void){
 /*----Variaveis temporarias----*/
 	int T0;
 	int T1;
@@ -11,6 +10,10 @@ void main(void)
 	int T5;
 	int T6;
 	int T7;
+	int T8;
+	int T9;
+	int T10;
+	int T11;
 /*------------------------------*/
 	literal K;
 	literal A;
@@ -18,7 +21,6 @@ void main(void)
 	int E;
 	int B;
 	int D;
-	int K;
 	double C;
 
 	printf("Digite B");
@@ -26,11 +28,9 @@ void main(void)
 	printf("Digite A:");
 	scanf("%s", A);
 	T0=B>2;
-	if(T0)
-	{
+	if(T0){
 		T1=B<=4;
-		if(T1)
-		{
+		if(T1){
 			printf("B esta entre 2 e 4");
 		}
 	}
@@ -49,14 +49,26 @@ void main(void)
 	printf("\n");
 	printf("%s", A);
 	T5=B<5;
-	while(T5)
-	{
+	while(T5){
 		T6=B+2;
 		D=T6;
+		T7=B<=3;
+		if(T7){
+			T8=E>4;
+			if(T8){
+				T9=B>5;
+				if(T9){
+					T10=D>=3;
+					if(T10){
+						printf("D maior ou igual a 3");
+					}
+				}
+			}
+		}
 		printf("%d", D);
-		T7=B+1;
-		B=T7;
-		T5=B<5;
+		T11=B+1;
+		B=T11;
+		T10=D>=3;
 	}
 	printf("\nB=\n");
 	printf("%d", D);

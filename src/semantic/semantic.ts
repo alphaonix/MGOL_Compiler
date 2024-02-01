@@ -10,8 +10,7 @@ const body = {
     header: [
     '#include <stdio.h>',
     'typedef char literal[256];',
-    'void main(void)',
-    '{'
+    'void main(void){'
     ],
     tempVars: [
         '/*----Variaveis temporarias----*/'
@@ -263,8 +262,7 @@ export class Semantic {
                 break;
 
             case '26': // COND -> CAB CP
-                this.output.code.push(generate_Tabs(this.recoil) + `if(T${this.count-1})`);
-                this.output.code.push(generate_Tabs(this.recoil) + `{`);
+                this.output.code.push(generate_Tabs(this.recoil) + `if(T${this.count-1}){`);
                 this.recoil++;
                 break;
 
@@ -290,8 +288,7 @@ export class Semantic {
                 break;
 
             case '34': // CABR -> repita ab_p EXP_R fc_p
-                this.output.code.push(generate_Tabs(this.recoil) + `while(T${this.count-1})`);
-                this.output.code.push(generate_Tabs(this.recoil) + `{`);
+                this.output.code.push(generate_Tabs(this.recoil) + `while(T${this.count-1}){`);
                 this.recoil++;
                 break;
         }

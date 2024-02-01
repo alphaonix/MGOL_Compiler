@@ -1,7 +1,7 @@
 inicio
     varinicio
         literal A,G,K;
-        inteiro B,D,K,E;
+        inteiro B,D,E;
         real C;
     varfim;
 
@@ -28,9 +28,22 @@ inicio
     escreva "\n";
     escreva A;
     repita (B<5)
-         	D<-B+2;
-         	escreva D;
-         	B<-B+1;
+        D<-B+2;
+        se(B<=3)
+        entao
+            se(E>4)
+            entao
+                se(B>5)
+                entao
+                    se(D>=3)
+                    entao
+                    escreva "D maior ou igual a 3";
+                    fimse
+                fimse
+            fimse
+        fimse
+        escreva D;
+        B<-B+1;
    fimrepita
    escreva "\nB=\n";
    escreva D;
