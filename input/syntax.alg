@@ -10,10 +10,10 @@ inicio
   	escreva "Digite A:";
   	leia A;
   	se(B>2)
-  		entao
+  	entao
 		se(B<=4)
-			entao
-				escreva "B esta entre 2 e 4";
+		entao
+			escreva "B esta entre 2 e 4";
       	fimse
     fimse
     B<-B+1;

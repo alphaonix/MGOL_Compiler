@@ -2,7 +2,7 @@ import {scanner} from "./scanner";
 import {Token} from "./token";
 import {getTokenFromTable, isKeyword, isPresent, symbolsTable} from "./symbols";
 
-const SOURCE_FILE_PATH = 'input/syntax.alg';
+const SOURCE_FILE_PATH = 'input/fonte.alg';
 
 function isError(tokenClass: string): boolean {
     return tokenClass === 'ERROR';

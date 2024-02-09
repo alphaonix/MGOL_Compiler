@@ -1,8 +1,7 @@
-import {Token} from "../lexicon/token";
-
 export class Error {
     public static line: number;
     public static column: number;
+    public static hasError: boolean;
 
     constructor() {}
 
@@ -20,6 +19,23 @@ export class Error {
                 break;
             default:
                 console.log(`ERRO LÉXICO - Erro desconhecido na linha ${line}, coluna ${column}`);
+                break;
+        }
+    }
+
+    public static semanticError(code: number, line: number, column: number) {
+        switch (code) {
+            case 1:
+                console.log(`Erro: Variável não declarada. linha ${line}, coluna ${column}`)
+                break;
+            case 2:
+                console.log(`Erro: Operandos com tipos incompatíveis. linha ${line}, coluna ${column}`)
+                break;
+            case 3:
+                console.log(`Erro: Tipos diferentes para atribuição. linha ${line}, coluna ${column}`)
+                break;
+            case 4:
+                console.log(`Erro: Variável já declarada. linha ${line}, coluna ${column}`)
                 break;
         }
     }
